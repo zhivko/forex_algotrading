@@ -4,11 +4,11 @@ The main file that will evolve into our trading library
 import v20
 from datetime import datetime, timedelta
 
-OANDA_ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"
-OANDA_ACCOUNT_ID = '11111' #put your access id here 
+OANDA_ACCESS_TOKEN = "ad966026cda607d4cacc67eb6ddefb87-701b85007009d4f9054461f5ec6594f8"
+OANDA_ACCOUNT_ID = 'zhivko74' #put your access id here 
 
 def main():
-    print "------ System online -------", datetime.now()
+    print("------ System online -------", datetime.now())
     latest_price_time = (datetime.utcnow() - timedelta(seconds=15)).isoformat('T')+'Z'
 
     api = v20.Context(
@@ -22,25 +22,25 @@ def main():
                     since=latest_price_time,
                     includeUnitsAvailable=False)
 
-    print response.reason, latest_price_time
+    print (response.reason, latest_price_time)
     
     prices = response.get("prices", 200)
     if len(prices):
         buy_price = prices[0].bids[0].price 
 
-        print "Buy at", buy_price
+        print ("Buy at", buy_price)
 
         response = api.order.market(
             OANDA_ACCOUNT_ID,
             instrument='EUR_USD',
             units=5000)
 
-        print "Trading id", response.get('orderFillTransaction').id
-        print "Account Balance", response.get('orderFillTransaction').accountBalance
-        print "Price", response.get('orderFillTransaction').price
+        print ("Trading id", response.get('orderFillTransaction').id)
+        print ("Account Balance", response.get('orderFillTransaction').accountBalance)
+        print ("Price", response.get('orderFillTransaction').price)
         
     else:
-        print response.reason
+        print (response.reason)
 
 if __name__ == "__main__":
     main()
